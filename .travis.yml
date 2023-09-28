@@ -3,6 +3,7 @@ jdk:
   - openjdk8
   - openjdk11
   - openjdk17
+  - openjdk21
 sudo: required
 
 cache:
