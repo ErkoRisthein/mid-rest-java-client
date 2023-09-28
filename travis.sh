@@ -16,7 +16,7 @@ elif [ "$TRAVIS_PULL_REQUEST" == "false" ] && [ "$TRAVIS_TAG" != "" ]; then
   echo "Starting to publish"
   ./publish.sh
   echo "Finished"
-elif [ "$TRAVIS_JDK_VERSION" == "openjdk8" ]; then
+elif [ "$TRAVIS_JDK_VERSION" == "openjdk17" ]; then
   ./mvnw test
   ./mvnw org.owasp:dependency-check-maven:check
   ./mvnw spotbugs:check
