@@ -29,7 +29,7 @@ package ee.sk.mid;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 
-import javax.xml.bind.DatatypeConverter;
+import jakarta.xml.bind.DatatypeConverter;
 
 import org.apache.commons.lang3.StringUtils;
 import org.junit.Test;

@@ -37,11 +37,7 @@ import static ee.sk.mid.mock.TestData.SIGNED_HASH_IN_BASE64;
 import static ee.sk.mid.mock.TestData.VALID_ECC_SIGNATURE_IN_BASE64;
 import static ee.sk.mid.mock.TestData.VALID_SIGNATURE_IN_BASE64;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.contains;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.hasItem;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.notNullValue;
+import static org.hamcrest.Matchers.*;
 
 import java.security.cert.X509Certificate;
 import java.util.Collections;
@@ -61,20 +57,20 @@ public class AuthenticationResponseValidatorTest {
         MidAuthentication authentication = createValidMobileIdAuthentication();
         MidAuthenticationResult authenticationResult = validator.validate(authentication);
 
+        assertThat(authenticationResult.getErrors(), is(empty()));
         assertThat(authenticationResult.isValid(), is(true));
-        assertThat(authenticationResult.getErrors().isEmpty(), is(true));
     }
 
     @Test
     public void validate_whenECC_shouldReturnValidAuthenticationResult() throws Exception{
-        X509Certificate caCertificate = fileToX509Certificate("/trusted_certificates/TEST_of_ESTEID-SK_2011.pem.crt");
+        X509Certificate caCertificate = fileToX509Certificate("/trusted_certificates/TEST_of_ESTEID-SK_2015.pem.crt");
         MidAuthenticationResponseValidator validator = new MidAuthenticationResponseValidator(Collections.singletonList(caCertificate));
 
         MidAuthentication authentication = createMobileIdAuthenticationWithECC();
         MidAuthenticationResult authenticationResult = validator.validate(authentication);
 
+        assertThat(authenticationResult.getErrors(), is(empty()));
         assertThat(authenticationResult.isValid(), is(true));
-        assertThat(authenticationResult.getErrors().isEmpty(), is(true));
     }
 
     @Test
@@ -110,8 +106,8 @@ public class AuthenticationResponseValidatorTest {
 
         MidAuthenticationResult authenticationResult = validator.validate(authentication);
 
+        assertThat(authenticationResult.getErrors(), is(empty()));
         assertThat(authenticationResult.isValid(), is(true));
-        assertThat(authenticationResult.getErrors().isEmpty(), is(true));
     }
 
     @Test
@@ -122,8 +118,8 @@ public class AuthenticationResponseValidatorTest {
         MidAuthentication authentication = createMobileIdAuthenticationWithInvalidResult();
         MidAuthenticationResult authenticationResult = validator.validate(authentication);
 
+        assertThat(authenticationResult.getErrors(), is(Collections.singletonList("Response result verification failed")));
         assertThat(authenticationResult.isValid(), is(false));
-        assertThat(authenticationResult.getErrors(), contains("Response result verification failed"));
     }
 
     @Test
@@ -249,7 +245,7 @@ public class AuthenticationResponseValidatorTest {
                 .withSignatureValueInBase64(signatureInBase64)
                 .withCertificate( MidCertificateParser.parseX509Certificate(AUTH_CERTIFICATE_EE))
                 .withSignedHashInBase64(SIGNED_HASH_IN_BASE64)
-                .withHashType( MidHashType.SHA512)
+                .withHashType( MidHashType.SHA256)
                 .build();
     }
 
@@ -259,7 +255,7 @@ public class AuthenticationResponseValidatorTest {
                 .withSignatureValueInBase64(VALID_ECC_SIGNATURE_IN_BASE64)
                 .withCertificate( MidCertificateParser.parseX509Certificate(ECC_CERTIFICATE))
                 .withSignedHashInBase64(SIGNED_ECC_HASH_IN_BASE64)
-                .withHashType( MidHashType.SHA512)
+                .withHashType( MidHashType.SHA256)
                 .build();
     }
 
